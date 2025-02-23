@@ -10,7 +10,7 @@ module.exports = class Auth {
             });
         } catch (error) {
             console.log(error);
-            res.status(500).send({ success: false, error: error.message || "Something went wrong!" });
+            res.status(500).send({ success: false, message: error.message || "Something went wrong!" });
         }
     }
     async Signup(req, res) {
@@ -22,7 +22,7 @@ module.exports = class Auth {
             });
         } catch (error) {
             console.log(error);
-            res.status(500).send({ success: false, error: error.message || "Something went wrong!" });
+            res.status(500).send({ success: false, message: error.message || "Something went wrong!" });
         }
     }
     async VerifyOtp(req, res) {
@@ -34,7 +34,7 @@ module.exports = class Auth {
             });
         } catch (error) {
             console.log(error);
-            res.status(500).send({ success: false, error: error.message || "Something went wrong!" });
+            res.status(500).send({ success: false, message: error.message || "Something went wrong!" });
         }
     }
 } 

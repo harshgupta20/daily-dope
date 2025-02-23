@@ -45,7 +45,7 @@ export default function SigninOptionModal({ open, setOpen }) {
                     console.log(response);
                     localStorage.setItem("token", response?.data?.data?.token);
                     localStorage.setItem("address", response?.data?.data?.address);
-                    setIsUserAuthenticated(response?.data?.data);
+                    setIsUserAuthenticated(response?.data?.data?.token);
                     toastAlert("success", "Signin Success.");
                     handleClose();
                 } else {
@@ -58,7 +58,7 @@ export default function SigninOptionModal({ open, setOpen }) {
                     console.log(response)
                     localStorage.setItem("token", response?.data?.data?.token);
                     localStorage.setItem("address", response?.data?.data?.address);
-                    setIsUserAuthenticated(response?.data?.data);
+                    setIsUserAuthenticated(response?.data?.data?.token);
                     toastAlert("success", "Signin Success.");
                     handleClose();
                 } else {

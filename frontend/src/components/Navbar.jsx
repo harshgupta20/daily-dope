@@ -56,7 +56,7 @@ const Navbar = () => {
     const signoutHandler = () => {
         try {
             setSigninLoader(true);
-            setIsUserAuthenticated({});
+            setIsUserAuthenticated(null);
             localStorage.removeItem("token");
             localStorage.removeItem("address");
             toastAlert("success", "Signout Success.");

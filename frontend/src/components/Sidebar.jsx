@@ -21,6 +21,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import { Link } from "react-router-dom";
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { Avatar, Button, Menu, MenuItem, Tooltip } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -83,6 +85,9 @@ export default function Sidebar({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
+
   const { isUserAuthenticated, setIsUserAuthenticated } = useContext(AuthContext);
 
   const handleDrawerOpen = () => {
@@ -92,6 +97,15 @@ export default function Sidebar({ children }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
 
   const MENU = [
     {
@@ -108,31 +122,87 @@ export default function Sidebar({ children }) {
     },
   ]
 
+  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+  const userProfileOptions = [
+    {
+      text: "Log Out",
+      callback: () => handleLogout()
+    }
+  ]
+
+  const handleLogout = () => {
+    setIsUserAuthenticated(false);
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("token");
+    console.log("Logout Success.");
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar style={{ height: "7dvh" }} position="fixed" open={open}>
-        <Toolbar style={{ minHeight: "100%" }}>
+        <Toolbar className='flex justify-between' style={{ minHeight: "100%" }}>
 
-          {/* Allow side option only for Authenticated users */}
-          {!isUserAuthenticated?.name &&
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={[
-                {
-                  mr: 2,
-                },
-                open && { display: 'none' },
-              ]}
-            >
-              <MenuIcon />
-            </IconButton>}
-          <Typography variant="h6" noWrap component="div">
-            Daily Dope
-          </Typography>
+          <Box className="flex items-center">
+            {/* Allow side option only for Authenticated users */}
+            {isUserAuthenticated &&
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={[
+                  {
+                    mr: 2,
+                  },
+                  open && { display: 'none' },
+                ]}
+              >
+                <MenuIcon />
+              </IconButton>
+            }
+
+            <Typography variant="h6" noWrap component="div">
+              Daily Dope
+            </Typography>
+
+          </Box>
+
+          {
+            !isUserAuthenticated ?
+              <button onClick={() => {navigate("/signin")}} className='p-2 border-2 border-white rounded-md'>Sign In</button>
+              :
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {userProfileOptions.map((option, key) => (
+                    <MenuItem key={key} onClick={handleCloseUserMenu}>
+                      <Typography onClick={() => option?.callback()} sx={{ textAlign: 'center' }}>{option?.text}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+          }
+
         </Toolbar>
       </AppBar>
       <Drawer

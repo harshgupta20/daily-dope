@@ -11,7 +11,7 @@ import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 
 const App = () => {
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState({});
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

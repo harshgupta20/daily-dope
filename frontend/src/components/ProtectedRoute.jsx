@@ -6,7 +6,7 @@ const ProtectedRoute = ({ element }) => {
   const { isUserAuthenticated } = useContext(AuthContext);
 
   // Check if user is authenticated
-  if (!isUserAuthenticated.token) {
+  if (!isUserAuthenticated) {
     // If not authenticated, redirect to home (or login page)
     return <Navigate to="/" />;
   }
