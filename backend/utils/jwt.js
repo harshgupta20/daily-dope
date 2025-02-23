@@ -1,17 +1,19 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
-const signJwt = (data, jwt_secret) => {
+const signJwt = (data) => {
     try {
-        return jwt.sign(data, jwt_secret, { expiresIn: '1d' });
+        return jwt.sign(data, JWT_SECRET, { expiresIn: '1d' });
     }
     catch (error) {
         throw error;
     }
 }
 
-const verifyJwt = (token, jwt_secret) => {
+const verifyJwt = (token) => {
     try {
-        return jwt.verify(token, jwt_secret);
+        return jwt.verify(token, JWT_SECRET);
     }
     catch (error) {
         throw error;

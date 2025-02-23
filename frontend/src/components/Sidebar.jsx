@@ -19,6 +19,8 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Link } from "react-router-dom";
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const drawerWidth = 240;
 
@@ -81,6 +83,8 @@ export default function Sidebar({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const { isUserAuthenticated, setIsUserAuthenticated } = useContext(AuthContext);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -109,20 +113,23 @@ export default function Sidebar({ children }) {
       <CssBaseline />
       <AppBar style={{ height: "7dvh" }} position="fixed" open={open}>
         <Toolbar style={{ minHeight: "100%" }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[
-              {
-                mr: 2,
-              },
-              open && { display: 'none' },
-            ]}
-          >
-            <MenuIcon />
-          </IconButton>
+
+          {/* Allow side option only for Authenticated users */}
+          {!isUserAuthenticated?.name &&
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={[
+                {
+                  mr: 2,
+                },
+                open && { display: 'none' },
+              ]}
+            >
+              <MenuIcon />
+            </IconButton>}
           <Typography variant="h6" noWrap component="div">
             Daily Dope
           </Typography>
