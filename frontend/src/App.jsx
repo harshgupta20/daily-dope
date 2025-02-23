@@ -6,6 +6,9 @@ import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRou
 import { ToastContainer } from 'react-toastify';
 import NotFound from './pages/NotFound';
 import { useEffect, useState } from 'react';
+import Sidebar from './components/Sidebar';
+import Signin from './pages/Signin';
+import Signup from './pages/Signup';
 
 const App = () => {
   const [isUserAuthenticated, setIsUserAuthenticated] = useState({});
@@ -21,18 +24,22 @@ const App = () => {
     <>
       <Router>
         <AuthContext.Provider value={{ isUserAuthenticated, setIsUserAuthenticated }}>
-          <Navbar />
-          <Routes>
-            <Route element={<Home />} path="/" />
-            {/* Protected routes */}
-            {/* <Route element={<ProtectedRoute element={<VoteTask />} />} path="/worker/vote" /> */}
+          {/* <Navbar /> */}
+          <div className='h-[100dvh]'>
+            <Sidebar>
+              <Routes>
+                <Route element={<Home />} path="/" />
+                {/* Protected routes */}
+                {/* <Route element={<ProtectedRoute element={<VoteTask />} />} path="/worker/vote" /> */}
+                <Route element={<Signin />} path="/signin" />
+                <Route element={<Signup />} path="/Signup" />
 
+                <Route element={<NotFound />} path="*" />
+              </Routes>
 
-            <Route element={<NotFound />} path="*" />
-          </Routes>
-
-
-          <ToastContainer />
+              <ToastContainer />
+            </Sidebar>
+          </div>
         </AuthContext.Provider>
       </Router>
     </>
