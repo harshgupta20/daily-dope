@@ -58,8 +58,8 @@ const Signup = () => {
       });
 
       if (response?.status === 200 && response?.data?.success) {
-        localStorage.setItem("userInfo", JSON.stringify(response?.data?.data))
-        localStorage.setItem("token", response?.data?.data?.token)
+        localStorage.setItem("userInfo", JSON.stringify(response?.data?.data));
+        localStorage.setItem("token", response?.data?.data?.token);
         setIsUserAuthenticated(response?.data?.data?.token);
         toastAlert("success", "Otp Verified Successfully.");
         navigate("/");

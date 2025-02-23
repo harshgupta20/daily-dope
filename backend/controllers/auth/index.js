@@ -9,7 +9,7 @@ module.exports = class Auth {
                 data: result
             });
         } catch (error) {
-            console.log(error);
+            console.log(error?.message);
             res.status(500).send({ success: false, message: error.message || "Something went wrong!" });
         }
     }
@@ -37,4 +37,4 @@ module.exports = class Auth {
             res.status(500).send({ success: false, message: error.message || "Something went wrong!" });
         }
     }
-} 
+}

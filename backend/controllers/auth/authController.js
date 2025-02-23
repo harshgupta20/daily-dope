@@ -8,16 +8,33 @@ const prismaClient = new PrismaClient();
 module.exports = class AuthController {
     async signin(requestBody) {
         try {
-            return "data";
+
+            const { email, password } = requestBody;
+
+            if (!email || !password) {
+                throw new Error("Required data missing.");
+            }
+
+            const response = prismaClient.user.findFirst({
+                where: {email, password}
+            });
+
+            if(!response){
+                throw new Error("Email/Password are wrong.");
+            }
+
+            const otp = generateOTP();
+            
+            return {otp,...response};
         } catch (error) {
             throw error;
         }
     }
     async signup(requestBody) {
         try {
-            const { name, email, password } = requestBody;
+            const { email } = requestBody;
 
-            if (!name || !email || !password) {
+            if (!email) {
                 throw new Error("Required data is missing.");
             }
 
@@ -27,23 +44,18 @@ module.exports = class AuthController {
                 }
             });
 
-            if (isUserExist && isUserExist?.userVerified) {
-                throw new Error("User already exist with this email.");
-            }
-
             const otp = generateOTP();
 
             let newUser = {};
             if (!isUserExist) {
-                console.log("new user created")
                 newUser = await prismaClient.user.create({
-                    data: { name, email, password, otp }
+                    data: { email, otp }
                 })
             }
-            else{
+            else {
                 await prismaClient.user.update({
-                    where: {email},
-                    data: {otp}
+                    where: { email },
+                    data: { otp }
                 })
             }
 
@@ -61,7 +73,7 @@ module.exports = class AuthController {
             }
 
             const userInfo = await prismaClient.user.findFirst({
-                where: {email}
+                where: { email }
             });
 
             if (!userInfo) {
@@ -80,14 +92,13 @@ module.exports = class AuthController {
                     otp
                 },
                 data: {
-                    userVerified: true,
                     otp: null
                 },
             })
 
-            const token = signJwt(userInfo);
+            const token = signJwt(updateUser);
             return {
-                ...userInfo,
+                ...updateUser,
                 token
             }
 
