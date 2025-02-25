@@ -29,7 +29,7 @@ const Signin = () => {
             const response = await axiosInstance.post("/auth/signup", signinFormInfo);
 
             if (response?.status === 200 && response?.data?.success) {
-                toastAlert("info", "Please enter otp.");
+                toastAlert("info", "OTP Sent.");
                 setShowOtpScreen(true);
             }
             else {

@@ -1,6 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
 const { generateOTP } = require('../../utils/helperFunction');
 const { signJwt } = require('../../utils/jwt');
+const { sendMail } = require('../../utils/emailService');
+const otpTemplate = require('../../utils/emailTemplates/otpTemplate');
+const welcomeTemplate = require('../../utils/emailTemplates/welcomeTemplate');
 require('dotenv').config();
 
 const prismaClient = new PrismaClient();
@@ -51,6 +54,10 @@ module.exports = class AuthController {
                 newUser = await prismaClient.user.create({
                     data: { email, otp }
                 })
+
+                console.log("here1");
+                sendMail(email, "Welcome to Daily Dope!", welcomeTemplate(email));
+                console.log("here2");
             }
             else {
                 await prismaClient.user.update({
@@ -59,7 +66,10 @@ module.exports = class AuthController {
                 })
             }
 
-            return { newUser, otp };
+            console.log(email)
+            const emailStatus = await sendMail(email, "OTP Verification - Daily Dope", otpTemplate(email, otp));
+            console.log(emailStatus)
+            return { newUser };
         } catch (error) {
             throw error;
         }
