@@ -109,16 +109,16 @@ export default function Sidebar({ children }) {
 
   const MENU = [
     {
-      text: "Sign In",
-      route: "/signin"
-    },
-    {
-      text: "Sign Up",
-      route: "/signup"
-    },
-    {
       text: "Add Data",
       route: "/add"
+    },
+    {
+      text: "Recall Me",
+      route: "/recall/candid-remind"
+    },
+    {
+      text: "Recall Me",
+      route: "/recall/add-category"
     },
   ]
 
@@ -140,7 +140,7 @@ export default function Sidebar({ children }) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar style={{ height: "7dvh" }} position="fixed" open={open}>
+      <AppBar style={{ height: "7dvh" }} open={open}>
         <Toolbar className='flex justify-between' style={{ minHeight: "100%" }}>
 
           <Box className="flex items-center">
@@ -170,7 +170,7 @@ export default function Sidebar({ children }) {
 
           {
             !isUserAuthenticated ?
-              <button onClick={() => {navigate("/signin")}} className='p-2 border-2 border-white rounded-md'>Sign In</button>
+              <button onClick={() => { navigate("/signin") }} className='p-2 border-2 border-white rounded-md'>Sign In</button>
               :
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
@@ -226,7 +226,7 @@ export default function Sidebar({ children }) {
         <Divider />
         <List>
           {MENU.map((option, index) => (
-            <Link key={option?.text} to={option?.route}>
+            <Link onClick={handleDrawerClose} key={option?.text} to={option?.route}>
               <ListItem >
                 <ListItemButton>
                   <ListItemIcon>
@@ -252,11 +252,10 @@ export default function Sidebar({ children }) {
           ))}
         </List> */}
       </Drawer>
-      <Main open={open} style={{ padding: 0 }}>
-        <DrawerHeader />
-        <div className=''>
-          {children}
-        </div>
+      <Main open={open} style={{ marginTop: "7dvh", padding: 0, height: "93dvh" }}>
+        {/* <div className='h-[93dvh]'> */}
+        {children}
+        {/* </div> */}
       </Main>
     </Box>
   );
